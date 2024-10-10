@@ -9,7 +9,7 @@ def initial_state():
     '''
     returns starting state of the board.
     '''
-    return [[EMPTY for i in range(3)] for j in range(3)] #preenche com EMPTY as linhas e colunas
+    return [[EMPTY for i in range(3)] for j in range(3)] # fills rows and columns with EMPTY
 
 
 def playear(board):
@@ -21,18 +21,16 @@ def playear(board):
     else:  #se a vez atual for de O então o próximo será X
         return X
 
-
 def actions(board):
     '''
     returns set of all possible actions (i, j) available on the board.
     '''
-    possible_actions = [] # list of all possible actions the player can take 
+    possible_actions = [] # list of all possible actions the player could choose 
     for i in range(3):
         for j in range(3):
             if board[i][j] == EMPTY: # possible actions = empty spaces in the board
                 possible_actions.append((i,j)) # join all the actions in a list of tuples
     return possible_actions
-
 
 def result(board, action):
     '''
@@ -53,15 +51,13 @@ def winner(board):
     '''
     returns the winner of the game, if there is one.
     '''
-    winner = utility(board)
-    if winner != 0:
-        if winner == 1:
-            return X
-        elif winner == -1:
-            return O
+    win = utility(board)
+    if win == 1: # if win is = 1, X won
+        return X
+    elif win == -1: # if win is = -1, O won 
+        return O
     else:
-        return None
-
+        return None # otherwise, is a tie
 
 def terminal(board):
     '''
