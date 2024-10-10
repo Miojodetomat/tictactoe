@@ -1,3 +1,5 @@
+# Hugo Gomes Soares
+# Julia Enriquetto de Brito
 import math
 
 X = 'X'
