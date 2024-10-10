@@ -18,7 +18,7 @@ def playear(board):
     '''
     if vezDe == X: #se a vez atual for de X então o próximo será O
         return O
-    else  #se a vez atual for de O então o próximo será X
+    else:  #se a vez atual for de O então o próximo será X
         return X
 
 
@@ -26,7 +26,12 @@ def actions(board):
     '''
     returns set of all possible actions (i, j) available on the board.
     '''
-    raise NotImplementedError
+    possible_actions = [] # list of all possible actions the player can take 
+    for i in range(3):
+        for j in range(3):
+            if board[i][j] == EMPTY: # possible actions = empty spaces in the board
+                possible_actions.append((i,j)) # join all the actions in a list of tuples
+    return possible_actions
 
 
 def result(board, action):
@@ -54,7 +59,7 @@ def winner(board):
             return X
         elif winner == -1:
             return O
-    else
+    else:
         return None
 
 
@@ -84,12 +89,12 @@ def utility(board):
         for j in range(1,3):
             if board[i][j] == aux:
                 count += 1
-            else
+            else:
                 break
         if count == 3:
             if aux == X:
                 return 1
-            else
+            else:
                 return -1
 
     for j in range(3):
@@ -98,26 +103,26 @@ def utility(board):
         for i in range(1,3):
             if board[i][j] == aux:
                 count += 1
-            else
+            else:
                 break
         if count == 3:
             if aux == X:
                 return 1
-            else
+            else:
                 return -1
 
     mid = board[1][1]
     if board[0][0] == mid and board[2][2] == mid:
         if mid == X:
-                return 1
-            else
-                return -1
+            return 1
+        else:
+            return -1
 
     if board[2][0] == mid and board[0][2] == mid:
         if mid == X:
-                return 1
-            else
-                return -1
+            return 1
+        else:
+            return -1
 
     return 0
 
