@@ -48,16 +48,22 @@ def result(board, action):
     returns the board that results from making move (i, j) on the board.
     '''
     i, j = action
-    # ARRUMAR AQUI 
-    if vezDe == X:
-        vezDe = O #altera a vez devido ação realizada
-        board[i][j] = X #atualiza a mudança do tabuleiro
-        return board
-    else:
-        vezDe = X #altera a vez devido ação realizada
-        board[i][j] = O #atualiza a mudança do tabuleiro
-        return board
+    
+    # copy of the original board
+    copy = []
+    for i_index in range(3):
+        new_i = []
+        for j_index in range(3):
+            new_i.append(board[i_index][j_index])
+        copy.append(new_i)
 
+    # current player and his moves
+    player = playear(board)
+
+    # copy player action
+    copy[i][j] = player
+
+    return copy
 
 def winner(board):
     '''
