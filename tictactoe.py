@@ -16,10 +16,21 @@ def playear(board):
     '''
     returns player who has the next turn on a board.
     '''
-    if vezDe == X: #se a vez atual for de X então o próximo será O
-        return O
-    else:  #se a vez atual for de O então o próximo será X
-        return X
+    # initialize counters
+    X_moves, O_moves = 0
+
+    for i in range(3): # loop over rows
+        for j in range(3): # loop over columns 
+            if board[i][j] == X:
+                X_moves += 1
+            elif board[i][j] == O:
+                O_moves += 1
+
+    # next player based on the counts
+    if X_moves == O_moves:
+        return X # equal moves, X turn 
+    else:
+        return O # if x has more moves, O turn 
 
 def actions(board):
     '''
@@ -36,7 +47,8 @@ def result(board, action):
     '''
     returns the board that results from making move (i, j) on the board.
     '''
-    i, j = actions
+    i, j = action
+    # ARRUMAR AQUI 
     if vezDe == X:
         vezDe = O #altera a vez devido ação realizada
         board[i][j] = X #atualiza a mudança do tabuleiro
@@ -62,23 +74,24 @@ def winner(board):
 def terminal(board):
     '''
     returns True if game is over, False otherwise.
-    '''
-    hasWinner = winner(board)
-    if hasWinner is not None:
+    ''' 
+    # if there is a winner, game has ended 
+    if winner(board) is not None:
         return True
 
     for i in range(3):
         for j in range(3):
-            if board[i][j] == EMPTY:
+            if board[i][j] == EMPTY: # if there is some empty cell, the game is not over yet
                 return False
+                
+    # no empty cells and no winner, must be a tie 
     return True
-
-
 
 def utility(board):
     '''
     returns 1 if X has won the game, -1 if O has won, 0 otherwise.
     '''
+    # rows
     for i in range(3):
         count = 1
         aux = board[i][0]
@@ -93,6 +106,7 @@ def utility(board):
             else:
                 return -1
 
+    # columns 
     for j in range(3):
         count = 1
         aux = board[0][j]
@@ -107,6 +121,7 @@ def utility(board):
             else:
                 return -1
 
+    # diagonal
     mid = board[1][1]
     if board[0][0] == mid and board[2][2] == mid:
         if mid == X:
