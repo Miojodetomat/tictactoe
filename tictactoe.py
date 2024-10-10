@@ -131,13 +131,7 @@ def utility(board):
 
     # diagonal
     mid = board[1][1]
-    if board[0][0] == mid and board[2][2] == mid:
-        if mid == X:
-            return 1
-        else:
-            return -1
-
-    if board[2][0] == mid and board[0][2] == mid:
+    if (board[0][0] == mid and board[2][2] == mid) or (board[2][0] == mid and board[0][2] == mid):
         if mid == X:
             return 1
         else:
