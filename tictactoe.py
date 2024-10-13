@@ -5,7 +5,6 @@ import math
 X = 'X'
 O = 'O'
 EMPTY = None
-vezDe = 'O'
 
 def initial_state():
     '''
@@ -14,12 +13,12 @@ def initial_state():
     return [[EMPTY for i in range(3)] for j in range(3)] # fills rows and columns with EMPTY
 
 
-def playear(board):
+def player(board):
     '''
     returns player who has the next turn on a board.
     '''
     # initialize counters
-    X_moves, O_moves = 0
+    X_moves, O_moves = (0,0)
 
     for i in range(3): # loop over rows
         for j in range(3): # loop over columns 
@@ -60,10 +59,10 @@ def result(board, action):
         copy.append(new_i)
 
     # current player and his moves
-    player = playear(board)
+    current_player = player(board)
 
     # copy player action
-    copy[i][j] = player
+    copy[i][j] = current_player
 
     return copy
 
@@ -111,7 +110,7 @@ def utility(board):
         if count == 3:
             if aux == X:
                 return 1
-            else:
+            elif aux == O:
                 return -1
 
     # columns 
@@ -126,7 +125,7 @@ def utility(board):
         if count == 3:
             if aux == X:
                 return 1
-            else:
+            elif aux == O:
                 return -1
 
     # diagonal
@@ -134,13 +133,51 @@ def utility(board):
     if (board[0][0] == mid and board[2][2] == mid) or (board[2][0] == mid and board[0][2] == mid):
         if mid == X:
             return 1
-        else:
+        elif mid == O:
             return -1
 
     return 0
 
-def minimax(board):
+def minimax(board): #algoritmo recursivo (árvore)
     '''
     returns the optimal action for the current player on the board.
     '''
-    raise NotImplementedError
+    #primeira chamada do método => onde a ação tomada é a relevante
+    cPlayer = player(board)
+    if cPlayer == X: #player quer maximizar o resultado
+        value = -2  #valor menor que todos os valores possíveis [-1, 0, 1]
+        bestAction = None
+        for a in actions(board):
+            newValue = insideMinimax(result(board, a)) #encontra os desdobramentos da ação tomada, buscando a decisão que maximiza o value
+            if newValue > value: #verifica se o novo valor é maior que o anterior
+                value = newValue #maximiza o valor
+                bestAction = a   #armazena a melhor ação correspondente à maximização
+        return bestAction # retorna a melhor ação encontrada
+
+    if cPlayer == O: #player quer minimizar o resultado
+        value = 2 #valor maior que todos os valores possíveis [-1, 0, 1]\s
+        bestAction = None
+        for a in actions(board):
+            newValue = insideMinimax(result(board, a)) #encontra os desdobramentos da ação tomada, buscando a decisão que minimiza o value
+            if newValue < value: #verifica se o novo valor é maior que o anterior
+                value = newValue #minimiza o valor
+                bestAction = a   #armazena a melhor ação correspondente à minimização
+        return bestAction # retorna a melhor ação encontrada
+    
+def insideMinimax(board): #recursão interna (n sei como tornar esse metodo privado, nem sei se é possivel, mas é o ideal)
+    #condição de parada da recursão => quando alcançar o fim do jogo
+    if terminal(board):
+        return utility(board) #retorna quem foi o vencedor
+    
+    cPlayer = player(board)
+    if cPlayer == X: #player quer maximizar o resultado
+        value = -math.inf
+        for a in actions(board):
+            value = max(value, insideMinimax(result(board, a))) #tenta encontrar a escolha que maximiza o value
+        return value # retorna a melhor ação encontrada
+
+    if cPlayer == O: #player quer minimizar o resultado
+        value = math.inf
+        for a in actions(board):
+            value = min(value, insideMinimax(result(board, a))) #tenta encontrar a escolha que minimize o value
+        return value # retorna a melhor ação encontrada
